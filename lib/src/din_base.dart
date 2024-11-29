@@ -47,16 +47,20 @@ class Din extends RouterGroup {
 
   Future<void> _serve(HttpServer server) async {
     await for (final request in server) {
-      final handlers = <Handler>[];
-      for (final group in groups) {
-        if (request.uri.path.startsWith(group.prefix)) {
-          handlers.addAll(group.middlewares);
-        }
-      }
-
-      final ctx = Context.fromRequest(request: request, handlers: handlers);
-      await router.handle(ctx);
-      await request.response.close();
+      _handle(request);
     }
+  }
+
+  Future<void> _handle(HttpRequest request) async {
+    final handlers = <Handler>[];
+    for (final group in groups) {
+      if (request.uri.path.startsWith(group.prefix)) {
+        handlers.addAll(group.middlewares);
+      }
+    }
+
+    final ctx = Context.fromRequest(request: request, handlers: handlers);
+    await router.handle(ctx);
+    await request.response.close();
   }
 }
