@@ -33,6 +33,11 @@ class RouterGroup {
     return this;
   }
 
+  RouterGroup uses(List<Handler> handlers) {
+    middlewares.addAll(handlers);
+    return this;
+  }
+
   RouterGroup route(String method, String path, Handler handler,
       [List<Handler>? middlewares]) {
     if (middlewares != null) {

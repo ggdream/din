@@ -5,12 +5,19 @@ import 'router.dart';
 import 'router_group.dart';
 
 class Din extends RouterGroup {
-  final router = Router();
+  final Router router;
   final List<RouterGroup> groups = [];
 
-  Din() : super.root() {
+  Din({
+    Router? router,
+  })  : router = router ?? MapRouter(),
+        super.root() {
     super.engine = this;
     groups.add(super.engine);
+  }
+
+  void notFound(Handler handler) {
+    router.notFound(handler);
   }
 
   Future<void> run({
