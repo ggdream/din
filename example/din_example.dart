@@ -4,15 +4,13 @@ import 'package:din/din.dart';
 
 Future<void> main(List<String> arguments) async {
   try {
-    final din = Din();
+    final din = Din()
+      ..use(recovery())
+      ..use(logger());
     din.notFound((Context ctx) {
       ctx.text('oh! not found');
     });
-    din.use((Context ctx) async {
-      print('start');
-      await ctx.next();
-      print('end');
-    }).get('/hello', (Context ctx) {
+    din.get('/hello', (Context ctx) {
       ctx.text("hello");
     });
 

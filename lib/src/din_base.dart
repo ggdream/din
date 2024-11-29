@@ -1,16 +1,20 @@
 import 'dart:io';
 
 import 'context.dart';
+import 'logger.dart';
 import 'router.dart';
 import 'router_group.dart';
 
 class Din extends RouterGroup {
   final Router router;
+  final Logger logger;
   final List<RouterGroup> groups = [];
 
   Din({
     Router? router,
-  })  : router = router ?? MapRouter(),
+    Logger? logger,
+  })  : logger = logger ?? DefaultLogger(),
+        router = router ?? MapRouter(),
         super.root() {
     super.engine = this;
     groups.add(super.engine);

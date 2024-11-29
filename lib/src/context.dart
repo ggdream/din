@@ -17,6 +17,8 @@ class Context {
     required this.handlers,
   });
 
+  HttpResponse get response => request.response;
+
   FutureOr<void> next() async {
     _index++;
     for (; _index < handlers.length; _index++) {
@@ -34,6 +36,23 @@ class Context {
 
   HttpHeaders headers() {
     return request.response.headers;
+  }
+
+  void abort({
+    String? data,
+    HttpStatusCode status = HttpStatusCode.ok,
+    String? contentType,
+    String charset = "utf-8",
+  }) {
+    _index = 2 ^ 63 - 1;
+    if (data != null) {
+      request.response.statusCode = status.code;
+      if (contentType != null) {
+        request.response.headers.contentType =
+            ContentType.parse("$contentType; charset=$charset");
+      }
+      request.response.write(data);
+    }
   }
 
   void model(dynamic data,
